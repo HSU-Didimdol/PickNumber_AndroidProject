@@ -13,4 +13,6 @@ dependencyResolutionManagement {
     }
 }
 rootProject.name = "PickNumber_AndroidProject"
-include ':app'
+include ':presentation'
+include ':domain'
+include ':data'
