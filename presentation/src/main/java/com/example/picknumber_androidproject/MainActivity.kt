@@ -63,17 +63,7 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
                             return
                         }
                         response.body()?.let { dto ->
-                            dto.items.forEach { bank ->
-                                Log.d("Banks", bank.toString())
-                                //Log.d("house", house.toString())
-                                val marker = Marker()
-                                marker.position = LatLng(bank.latitude, bank.longitude)
-                                // TODO : 마커 클릭 리스너
-                                marker.map = naverMap
-                                marker.tag = bank.code
-                                marker.icon = MarkerIcons.BLACK
-                                marker.iconTintColor = Color.RED
-                            }
+                            updateMarker(dto.items)
                         }
                     }
 
@@ -81,6 +71,20 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
                         // 실패 처리에 대한 구현
                     }
                 })
+        }
+    }
+
+    private fun updateMarker(bankes: List<BankModel>) {
+        bankes.forEach { bank ->
+            Log.d("Banks", bank.toString())
+            //Log.d("house", house.toString())
+            val marker = Marker()
+            marker.position = LatLng(bank.latitude, bank.longitude)
+            // TODO : 마커 클릭 리스너
+            marker.map = naverMap
+            marker.tag = bank.code
+            marker.icon = MarkerIcons.BLACK
+            marker.iconTintColor = Color.RED
         }
     }
 
