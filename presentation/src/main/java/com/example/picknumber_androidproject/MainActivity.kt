@@ -66,7 +66,6 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
                             updateMarker(dto.items)
                         }
                     }
-
                     override fun onFailure(call: Call<BankDto>, t: Throwable) {
                         // 실패 처리에 대한 구현
                     }
