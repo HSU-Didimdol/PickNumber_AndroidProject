@@ -1,4 +1,4 @@
-package com.example.picknumber_androidproject
+package com.example.picknumber_androidproject.view.main
 
 import androidx.lifecycle.ViewModel
 

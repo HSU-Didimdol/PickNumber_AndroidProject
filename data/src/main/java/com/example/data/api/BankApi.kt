@@ -1,6 +1,6 @@
 package com.example.data.api
 
-import com.example.data.Model.Bank.BankListDto
+import com.example.data.model.bank.BankListDto
 import retrofit2.Call
 import retrofit2.http.GET
 

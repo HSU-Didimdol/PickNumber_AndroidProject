@@ -1,6 +1,6 @@
 package com.example.data.api
 
-import com.example.data.Model.Directions5.DirectionsDto
+import com.example.data.model.directions5.DirectionsDto
 import retrofit2.Call
 import retrofit2.http.GET
 import retrofit2.http.Header

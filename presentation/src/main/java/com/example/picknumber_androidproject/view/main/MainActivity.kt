@@ -1,15 +1,16 @@
-package com.example.picknumber_androidproject
+package com.example.picknumber_androidproject.view.main
 
 import android.graphics.Color
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import androidx.core.view.WindowCompat
-import com.example.data.Model.Bank.BankDto
-import com.example.data.Model.Bank.BankListDto
+import com.example.data.model.bank.BankDto
+import com.example.data.model.bank.BankListDto
 import com.example.data.api.BankApi
 import com.example.data.api.Direction5Api
-import com.example.data.Model.Directions5.DirectionsDto
+import com.example.data.model.directions5.DirectionsDto
+import com.example.picknumber_androidproject.R
 import com.example.picknumber_androidproject.databinding.ActivityMainBinding
 import com.naver.maps.geometry.LatLng
 import com.naver.maps.map.*
@@ -122,7 +123,10 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
         retrofit.create(BankApi::class.java).also { it ->
             it.getBankList()
                 .enqueue(object : Callback<BankListDto> {
-                    override fun onResponse(call: Call<BankListDto>, response: Response<BankListDto>) {
+                    override fun onResponse(
+                        call: Call<BankListDto>,
+                        response: Response<BankListDto>
+                    ) {
                         if (response.isSuccessful.not()) {
                             // 실패 처리에 대한 구현
                             return
