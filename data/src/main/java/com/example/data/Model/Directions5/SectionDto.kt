@@ -1,6 +1,6 @@
 package com.example.data.Model.Directions5
 
-data class Section(
+data class SectionDto(
     val congestion: Int,
     val distance: Int,
     val name: String,

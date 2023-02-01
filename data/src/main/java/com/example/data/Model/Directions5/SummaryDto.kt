@@ -1,17 +1,14 @@
 package com.example.data.Model.Directions5
 
-import com.example.data.Model.Directions5.Goal
-import com.example.data.Model.Directions5.Start
-
-data class Summary(
+data class SummaryDto(
     val bbox: List<List<Double>>,
     val departureTime: String,
     val distance: Int,
     val duration: Int,
     val etaServiceType: Int,
     val fuelPrice: Int,
-    val goal: Goal,
-    val start: Start,
+    val goalDto: GoalDto,
+    val startDto: StartDto,
     val taxiFare: Int,
     val tollFare: Int
 )

@@ -9,7 +9,7 @@ import com.example.data.Model.Bank.BankDto
 import com.example.data.Model.Bank.BankListDto
 import com.example.data.api.BankApi
 import com.example.data.api.Direction5Api
-import com.example.data.Model.Directions5.DirectionModel
+import com.example.data.Model.Directions5.DirectionsDto
 import com.example.picknumber_androidproject.databinding.ActivityMainBinding
 import com.naver.maps.geometry.LatLng
 import com.naver.maps.map.*
@@ -88,16 +88,16 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
                 start = myPosition,
                 goal = tempPosition
             )
-                .enqueue(object : Callback<DirectionModel> {
+                .enqueue(object : Callback<DirectionsDto> {
                     override fun onResponse(
-                        call: Call<DirectionModel>,
-                        response: Response<DirectionModel>
+                        call: Call<DirectionsDto>,
+                        response: Response<DirectionsDto>
                     ) {
                         if (response.isSuccessful.not()) {
                             Log.d("실패", response.toString())
                             return
                         } else {
-                            response.body()?.route?.traoptimal?.get(0)?.summary?.distance.let { it1 ->
+                            response.body()?.routeDto?.traoptimalDto?.get(0)?.summaryDto?.distance.let { it1 ->
                                 Log.d(
                                     "거리 출력", it1.toString()
                                 )
@@ -106,7 +106,7 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
                         }
                     }
 
-                    override fun onFailure(call: Call<DirectionModel>, t: Throwable) {
+                    override fun onFailure(call: Call<DirectionsDto>, t: Throwable) {
                     }
 
                 })

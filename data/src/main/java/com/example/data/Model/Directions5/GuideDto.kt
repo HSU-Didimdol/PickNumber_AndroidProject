@@ -1,6 +1,6 @@
 package com.example.data.Model.Directions5
 
-data class Guide(
+data class GuideDto(
     val distance: Int,
     val duration: Int,
     val instructions: String,
