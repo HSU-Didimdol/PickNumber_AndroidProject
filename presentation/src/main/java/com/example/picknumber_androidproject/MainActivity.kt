@@ -4,11 +4,16 @@ import android.graphics.Color
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import androidx.core.view.WindowCompat
+import com.example.data.*
+import com.example.data.directionModel.DirectionModel
+import com.example.picknumber_androidproject.databinding.ActivityMainBinding
 import com.naver.maps.geometry.LatLng
 import com.naver.maps.map.*
 import com.naver.maps.map.overlay.Marker
 import com.naver.maps.map.util.FusedLocationSource
 import com.naver.maps.map.util.MarkerIcons
+import okhttp3.ResponseBody
 import retrofit2.*
 import retrofit2.converter.gson.GsonConverterFactory
 
@@ -23,10 +28,15 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
     private val mapView: MapView by lazy {
         findViewById(R.id.mapView)
     }
+    private lateinit var binding: ActivityMainBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+        binding = ActivityMainBinding.inflate(layoutInflater)
+        setContentView(binding.root)
+
+        WindowCompat.setDecorFitsSystemWindows(window, true)
+
         mapView.onCreate(savedInstanceState)
         mapView.getMapAsync(this)
 
@@ -35,9 +45,6 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
     override fun onMapReady(Map: NaverMap) {
         naverMap = Map
 
-        val cameraUpdate = CameraUpdate.scrollTo(LatLng(37.4652659, 126.9050532))
-        naverMap.moveCamera(cameraUpdate)
-
         val uiSetting = naverMap.uiSettings
         uiSetting.isLocationButtonEnabled = true
 
@@ -45,7 +52,63 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
             FusedLocationSource(this@MainActivity, LOCATION_PERMISSION_REQUEST_CODE)
         naverMap.locationSource = locationSource
 
+        naverMap.cameraPosition.target.latitude
+        naverMap.cameraPosition.target.longitude
+
+        val cameraUpdate = CameraUpdate.scrollTo(
+            LatLng(
+                naverMap.cameraPosition.target.latitude,
+                naverMap.cameraPosition.target.longitude
+            )
+        )
+        naverMap.moveCamera(cameraUpdate)
+
+
         getBankListFromAPI()
+        getBankListDistanceFromAPI(naverMap.cameraPosition.target)
+
+        //127.2566183,37.0095927 // 안성 본
+    }
+
+    private fun getBankListDistanceFromAPI(target: LatLng) {
+        val retrofit = Retrofit.Builder()
+            .baseUrl("https://naveropenapi.apigw.ntruss.com/map-direction/")
+            .addConverterFactory(GsonConverterFactory.create())
+            .build()
+
+        val myPosition = target.longitude.toString() + "," + target.latitude.toString()
+        val tempPosition = "127.2566183,37.0095927"
+
+        retrofit.create(Direction5Api::class.java).also {
+            it.getDistance(
+                "f1qm5gy16z",
+                "PJ5FKlGtMjQ4lwZLVSPul185mSDiKprEaWjCYtpI",
+                start = myPosition,
+                goal = tempPosition
+            )
+                .enqueue(object : Callback<DirectionModel> {
+                    override fun onResponse(
+                        call: Call<DirectionModel>,
+                        response: Response<DirectionModel>
+                    ) {
+                        if (response.isSuccessful.not()) {
+                            Log.d("실패", response.toString())
+                            return
+                        } else {
+                            response.body()?.route?.traoptimal?.get(0)?.summary?.distance.let { it1 ->
+                                Log.d(
+                                    "거리 출력", it1.toString()
+                                )
+                            }
+                            response.body()?.toString()?.let { it1 -> Log.d("성공", it1) }
+                        }
+                    }
+
+                    override fun onFailure(call: Call<DirectionModel>, t: Throwable) {
+                    }
+
+                })
+        }
     }
 
     private fun getBankListFromAPI() {
@@ -54,7 +117,7 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
             .addConverterFactory(GsonConverterFactory.create())
             .build()
 
-        retrofit.create(BankService::class.java).also { it ->
+        retrofit.create(BankApi::class.java).also { it ->
             it.getBankList()
                 .enqueue(object : Callback<BankDto> {
                     override fun onResponse(call: Call<BankDto>, response: Response<BankDto>) {
@@ -66,6 +129,7 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
                             updateMarker(dto.items)
                         }
                     }
+
                     override fun onFailure(call: Call<BankDto>, t: Throwable) {
                         // 실패 처리에 대한 구현
                     }
@@ -73,17 +137,20 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
         }
     }
 
-    private fun updateMarker(bankes: List<BankModel>) {
-        bankes.forEach { bank ->
+    private fun updateMarker(banks: List<BankModel>) {
+        banks.forEach { bank ->
             Log.d("Banks", bank.toString())
-            //Log.d("house", house.toString())
             val marker = Marker()
             marker.position = LatLng(bank.latitude, bank.longitude)
             // TODO : 마커 클릭 리스너
             marker.map = naverMap
             marker.tag = bank.code
             marker.icon = MarkerIcons.BLACK
-            marker.iconTintColor = Color.RED
+            marker.width = Marker.SIZE_AUTO
+            marker.height = Marker.SIZE_AUTO
+            marker.iconTintColor = Color.BLUE
+            marker.captionText = bank.name + " 새마을금고 " + bank.divisionName
+            marker.isHideCollidedSymbols = true
         }
     }
 

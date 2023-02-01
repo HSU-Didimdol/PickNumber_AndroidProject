@@ -1,4 +1,4 @@
-package com.example.picknumber_androidproject
+package com.example.data
 
 data class BankDto(
     val items: List<BankModel>

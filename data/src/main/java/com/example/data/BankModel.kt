@@ -1,4 +1,4 @@
-package com.example.picknumber_androidproject
+package com.example.data
 
 data class BankModel(
     val code: String,
@@ -21,5 +21,6 @@ data class BankModel(
     val memo: String,
     val use: String = "Y",
     val modifyDate: String,
-    val registrationDate: String
+    val registrationDate: String,
+    val distance: Int
 )
