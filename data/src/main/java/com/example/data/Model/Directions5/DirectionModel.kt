@@ -1,4 +1,4 @@
-package com.example.data.directionModel
+package com.example.data.Model.Directions5
 
 data class DirectionModel(
     val code: Int,

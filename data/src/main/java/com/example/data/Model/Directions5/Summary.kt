@@ -1,4 +1,7 @@
-package com.example.data.directionModel
+package com.example.data.Model.Directions5
+
+import com.example.data.Model.Directions5.Goal
+import com.example.data.Model.Directions5.Start
 
 data class Summary(
     val bbox: List<List<Double>>,

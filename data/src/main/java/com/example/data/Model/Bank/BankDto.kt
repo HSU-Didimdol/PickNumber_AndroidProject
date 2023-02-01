@@ -1,6 +1,6 @@
-package com.example.data
+package com.example.data.Model.Bank
 
-data class BankModel(
+data class BankDto(
     val code: String,
     val divisionCode: String,
     val companyID: Int,

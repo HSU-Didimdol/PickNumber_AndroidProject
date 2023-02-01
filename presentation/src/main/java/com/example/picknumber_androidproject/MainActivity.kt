@@ -5,15 +5,17 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import androidx.core.view.WindowCompat
-import com.example.data.*
-import com.example.data.directionModel.DirectionModel
+import com.example.data.Model.Bank.BankDto
+import com.example.data.Model.Bank.BankListDto
+import com.example.data.api.BankApi
+import com.example.data.api.Direction5Api
+import com.example.data.Model.Directions5.DirectionModel
 import com.example.picknumber_androidproject.databinding.ActivityMainBinding
 import com.naver.maps.geometry.LatLng
 import com.naver.maps.map.*
 import com.naver.maps.map.overlay.Marker
 import com.naver.maps.map.util.FusedLocationSource
 import com.naver.maps.map.util.MarkerIcons
-import okhttp3.ResponseBody
 import retrofit2.*
 import retrofit2.converter.gson.GsonConverterFactory
 
@@ -119,8 +121,8 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
 
         retrofit.create(BankApi::class.java).also { it ->
             it.getBankList()
-                .enqueue(object : Callback<BankDto> {
-                    override fun onResponse(call: Call<BankDto>, response: Response<BankDto>) {
+                .enqueue(object : Callback<BankListDto> {
+                    override fun onResponse(call: Call<BankListDto>, response: Response<BankListDto>) {
                         if (response.isSuccessful.not()) {
                             // 실패 처리에 대한 구현
                             return
@@ -130,14 +132,14 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
                         }
                     }
 
-                    override fun onFailure(call: Call<BankDto>, t: Throwable) {
+                    override fun onFailure(call: Call<BankListDto>, t: Throwable) {
                         // 실패 처리에 대한 구현
                     }
                 })
         }
     }
 
-    private fun updateMarker(banks: List<BankModel>) {
+    private fun updateMarker(banks: List<BankDto>) {
         banks.forEach { bank ->
             Log.d("Banks", bank.toString())
             val marker = Marker()
