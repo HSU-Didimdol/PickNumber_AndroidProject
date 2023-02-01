@@ -1,3 +1,8 @@
 package com.example.picknumber_androidproject.view.main
 
-class MainUiState{}
+data class MainUiState(
+    val bankName: String = "",
+    val isLoading: Boolean = false,
+
+    )
+

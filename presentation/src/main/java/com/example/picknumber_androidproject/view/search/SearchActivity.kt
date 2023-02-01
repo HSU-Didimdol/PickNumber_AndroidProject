@@ -1,17 +1,26 @@
 package com.example.picknumber_androidproject.view.search
 
-import androidx.appcompat.app.AppCompatActivity
+import android.content.Context
+import android.content.Intent
 import android.os.Bundle
-import com.example.picknumber_androidproject.R
+import android.view.LayoutInflater
 import com.example.picknumber_androidproject.databinding.ActivitySearchBinding
+import com.example.picknumber_androidproject.view.common.ViewBindingActivity
 
-class SearchActivity : AppCompatActivity() {
+class SearchActivity : ViewBindingActivity<ActivitySearchBinding>() {
 
-    private lateinit var binding: ActivitySearchBinding
+    override val bindingInflater: (LayoutInflater) -> ActivitySearchBinding
+        get() = ActivitySearchBinding::inflate
+
+
+    companion object {
+        fun getIntent(context: Context): Intent {
+            return Intent(context, SearchActivity::class.java)
+        }
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = ActivitySearchBinding.inflate(layoutInflater)
         setContentView(binding.root)
     }
 }

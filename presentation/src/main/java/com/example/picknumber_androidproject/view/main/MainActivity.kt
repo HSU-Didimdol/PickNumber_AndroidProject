@@ -1,9 +1,12 @@
 package com.example.picknumber_androidproject.view.main
 
+import android.content.Context
+import android.content.Intent
 import android.graphics.Color
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.view.LayoutInflater
+import androidx.activity.viewModels
 import androidx.core.view.WindowCompat
 import com.example.data.model.bank.BankDto
 import com.example.data.model.bank.BankListDto
@@ -12,6 +15,8 @@ import com.example.data.api.Direction5Api
 import com.example.data.model.directions5.DirectionsDto
 import com.example.picknumber_androidproject.R
 import com.example.picknumber_androidproject.databinding.ActivityMainBinding
+import com.example.picknumber_androidproject.view.common.ViewBindingActivity
+import com.example.picknumber_androidproject.view.search.SearchActivity
 import com.naver.maps.geometry.LatLng
 import com.naver.maps.map.*
 import com.naver.maps.map.overlay.Marker
@@ -24,24 +29,37 @@ import retrofit2.converter.gson.GsonConverterFactory
 //  "x": "126.9050532",
 //  "y": "37.4652659",
 
-class MainActivity : AppCompatActivity(), OnMapReadyCallback {
+class MainActivity : ViewBindingActivity<ActivityMainBinding>(), OnMapReadyCallback {
 
+    private val viewModel: MainViewModel by viewModels()
     private lateinit var naverMap: NaverMap
     private lateinit var locationSource: FusedLocationSource
     private val mapView: MapView by lazy {
         findViewById(R.id.mapView)
     }
-    private lateinit var binding: ActivityMainBinding
+    override val bindingInflater: (LayoutInflater) -> ActivityMainBinding
+        get() = ActivityMainBinding::inflate
+
+    companion object {
+        private const val LOCATION_PERMISSION_REQUEST_CODE = 1000
+
+        fun getIntent(context: Context): Intent {
+            return Intent(context, MainActivity::class.java)
+        }
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
         WindowCompat.setDecorFitsSystemWindows(window, true)
 
         mapView.onCreate(savedInstanceState)
         mapView.getMapAsync(this)
+
+        binding.searchButton.setOnClickListener {
+            startSearchActivity()
+        }
 
     }
 
@@ -213,7 +231,8 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
         mapView.onLowMemory()
     }
 
-    companion object {
-        private const val LOCATION_PERMISSION_REQUEST_CODE = 1000
+    private fun startSearchActivity() {
+        val intent = SearchActivity.getIntent(this)
+        startActivity(intent)
     }
 }
