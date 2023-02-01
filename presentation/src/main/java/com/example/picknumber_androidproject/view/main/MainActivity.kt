@@ -51,11 +51,10 @@ class MainActivity : ViewBindingActivity<ActivityMainBinding>(), OnMapReadyCallb
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
-
-        WindowCompat.setDecorFitsSystemWindows(window, true)
-
         mapView.onCreate(savedInstanceState)
         mapView.getMapAsync(this)
+
+        WindowCompat.setDecorFitsSystemWindows(window, true)
 
         binding.searchButton.setOnClickListener {
             startSearchActivity()
@@ -177,6 +176,7 @@ class MainActivity : ViewBindingActivity<ActivityMainBinding>(), OnMapReadyCallb
             marker.isHideCollidedSymbols = true
         }
     }
+
 
 
     override fun onRequestPermissionsResult(
