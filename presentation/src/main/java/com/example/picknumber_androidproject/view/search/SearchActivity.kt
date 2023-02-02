@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
+import androidx.activity.viewModels
 import com.example.picknumber_androidproject.databinding.ActivitySearchBinding
 import com.example.picknumber_androidproject.view.common.ViewBindingActivity
 
@@ -18,6 +19,8 @@ class SearchActivity : ViewBindingActivity<ActivitySearchBinding>() {
             return Intent(context, SearchActivity::class.java)
         }
     }
+
+    private val viewModel: SearchViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
