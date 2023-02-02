@@ -87,7 +87,7 @@ class MainActivity : ViewBindingActivity<ActivityMainBinding>(), OnMapReadyCallb
         getBankListFromAPI()
         getBankListDistanceFromAPI(naverMap.cameraPosition.target)
 
-        //127.2566183,37.0095927 // 안성 본
+        //127.2566183,37.0095927 // 안성 본점
     }
 
     private fun getBankListDistanceFromAPI(target: LatLng) {
@@ -117,7 +117,7 @@ class MainActivity : ViewBindingActivity<ActivityMainBinding>(), OnMapReadyCallb
                         } else {
                             response.body()?.routeDto?.traoptimalDto?.get(0)?.summaryDto?.distance.let { it1 ->
                                 Log.d(
-                                    "거리 출력", it1.toString()
+                                    "거리 출력", it1.toString() // 내집에서 안성 본점까지의 거리 연결
                                 )
                             }
                             response.body()?.toString()?.let { it1 -> Log.d("성공", it1) }
@@ -176,7 +176,6 @@ class MainActivity : ViewBindingActivity<ActivityMainBinding>(), OnMapReadyCallb
             marker.isHideCollidedSymbols = true
         }
     }
-
 
 
     override fun onRequestPermissionsResult(
