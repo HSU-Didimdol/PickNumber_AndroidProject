@@ -42,16 +42,25 @@ dependencies {
     implementation project(':data')
     implementation project(':domain')
 
-    implementation("androidx.fragment:fragment:$fragment_version")
-    // Kotlin
-    implementation("androidx.fragment:fragment-ktx:$fragment_version")
+    // Coroutine
+    implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:$life_cycle_version"
+    implementation "androidx.lifecycle:lifecycle-runtime-ktx:$life_cycle_version"
+    testImplementation "org.jetbrains.kotlinx:kotlinx-coroutines-test:$coroutine_version"
 
-    implementation "androidx.room:room-runtime:$room_version"
-    annotationProcessor "androidx.room:room-compiler:$room_version"
-    kapt "androidx.room:room-compiler:$room_version"
-    testImplementation "androidx.room:room-testing:$room_version"
+    // fragment
+    debugImplementation "androidx.fragment:fragment-testing:$fragment_version"
+    implementation "androidx.fragment:fragment-ktx:$fragment_version"
+
+    // navigation
+    implementation 'androidx.navigation:navigation-fragment:2.5.3'
+    implementation 'androidx.navigation:navigation-ui-ktx:2.5.3'
+
 
     implementation 'com.google.android.material:material:1.8.0'
+
+    // paging
+    implementation 'androidx.paging:paging-common-ktx:3.1.1'
+    implementation 'androidx.paging:paging-runtime-ktx:3.1.1'
 
     implementation 'androidx.core:core-ktx:1.7.0'
     implementation 'androidx.appcompat:appcompat:1.5.1'

@@ -1,6 +1,5 @@
 package com.example.picknumber_androidproject.view.main
 
-import android.content.Context
 import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
@@ -13,6 +12,7 @@ import com.example.data.model.bank.BankListDto
 import com.example.data.api.BankApi
 import com.example.data.api.Direction5Api
 import com.example.data.model.directions5.DirectionsDto
+import com.example.data.url.Url
 import com.example.picknumber_androidproject.R
 import com.example.picknumber_androidproject.databinding.ActivityMainBinding
 import com.example.picknumber_androidproject.view.common.ViewBindingActivity
@@ -22,6 +22,7 @@ import com.naver.maps.map.*
 import com.naver.maps.map.overlay.Marker
 import com.naver.maps.map.util.FusedLocationSource
 import com.naver.maps.map.util.MarkerIcons
+import kotlinx.coroutines.CoroutineScope
 import retrofit2.*
 import retrofit2.converter.gson.GsonConverterFactory
 
@@ -42,10 +43,6 @@ class MainActivity : ViewBindingActivity<ActivityMainBinding>(), OnMapReadyCallb
 
     companion object {
         private const val LOCATION_PERMISSION_REQUEST_CODE = 1000
-
-        fun getIntent(context: Context): Intent {
-            return Intent(context, MainActivity::class.java)
-        }
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -83,7 +80,6 @@ class MainActivity : ViewBindingActivity<ActivityMainBinding>(), OnMapReadyCallb
         )
         naverMap.moveCamera(cameraUpdate)
 
-
         getBankListFromAPI()
         getBankListDistanceFromAPI(naverMap.cameraPosition.target)
 
@@ -92,7 +88,7 @@ class MainActivity : ViewBindingActivity<ActivityMainBinding>(), OnMapReadyCallb
 
     private fun getBankListDistanceFromAPI(target: LatLng) {
         val retrofit = Retrofit.Builder()
-            .baseUrl("https://naveropenapi.apigw.ntruss.com/map-direction/")
+            .baseUrl(Url.DIRECTION5_URL)
             .addConverterFactory(GsonConverterFactory.create())
             .build()
 
@@ -133,7 +129,7 @@ class MainActivity : ViewBindingActivity<ActivityMainBinding>(), OnMapReadyCallb
 
     private fun getBankListFromAPI() {
         val retrofit = Retrofit.Builder()
-            .baseUrl("https://run.mocky.io")
+            .baseUrl(Url.MOCK_BANK_URL)
             .addConverterFactory(GsonConverterFactory.create())
             .build()
 
@@ -161,11 +157,13 @@ class MainActivity : ViewBindingActivity<ActivityMainBinding>(), OnMapReadyCallb
     }
 
     private fun updateMarker(banks: List<BankDto>) {
+
         banks.forEach { bank ->
             Log.d("Banks", bank.toString())
             val marker = Marker()
             marker.position = LatLng(bank.latitude, bank.longitude)
             // TODO : 마커 클릭 리스너
+            marker.infoWindow
             marker.map = naverMap
             marker.tag = bank.code
             marker.icon = MarkerIcons.BLACK
@@ -231,7 +229,9 @@ class MainActivity : ViewBindingActivity<ActivityMainBinding>(), OnMapReadyCallb
     }
 
     private fun startSearchActivity() {
-        val intent = SearchActivity.getIntent(this)
+        val intent = SearchActivity.getIntent(this).apply {
+            flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_TASK_ON_HOME
+        }
         startActivity(intent)
     }
 }

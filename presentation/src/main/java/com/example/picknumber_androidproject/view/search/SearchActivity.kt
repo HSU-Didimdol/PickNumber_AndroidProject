@@ -13,7 +13,6 @@ class SearchActivity : ViewBindingActivity<ActivitySearchBinding>() {
     override val bindingInflater: (LayoutInflater) -> ActivitySearchBinding
         get() = ActivitySearchBinding::inflate
 
-
     companion object {
         fun getIntent(context: Context): Intent {
             return Intent(context, SearchActivity::class.java)
@@ -24,6 +23,6 @@ class SearchActivity : ViewBindingActivity<ActivitySearchBinding>() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(binding.root)
+
     }
 }
