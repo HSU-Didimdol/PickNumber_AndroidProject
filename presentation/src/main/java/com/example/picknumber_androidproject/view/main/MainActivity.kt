@@ -84,80 +84,6 @@ class MainActivity : ViewBindingActivity<ActivityMainBinding>(), OnMapReadyCallb
             )
 
         naverMap.moveCamera(cameraUpdate)
-
-        getBankListDistanceFromAPI(naverMap.cameraPosition.target)
-
-        //127.2566183,37.0095927 // 안성 본점
-    }
-
-    private fun getBankListDistanceFromAPI(target: LatLng) {
-        val retrofit = Retrofit.Builder()
-            .baseUrl(Url.DIRECTION5_URL)
-            .addConverterFactory(GsonConverterFactory.create())
-            .build()
-
-        val myPosition = target.longitude.toString() + "," + target.latitude.toString()
-        val tempPosition = "127.2566183,37.0095927"
-
-        retrofit.create(Direction5Api::class.java).also {
-            it.getDistance(
-                "f1qm5gy16z",
-                "PJ5FKlGtMjQ4lwZLVSPul185mSDiKprEaWjCYtpI",
-                start = myPosition,
-                goal = tempPosition
-            )
-                .enqueue(object : Callback<DirectionsDto> {
-                    override fun onResponse(
-                        call: Call<DirectionsDto>,
-                        response: Response<DirectionsDto>
-                    ) {
-                        if (response.isSuccessful.not()) {
-                            Log.d("실패", response.toString())
-                            return
-                        } else {
-                            response.body()?.routeDto?.traoptimalDto?.get(0)?.summaryDto?.distance.let { it1 ->
-                                Log.d(
-                                    "거리 출력", it1.toString() // 내집에서 안성 본점까지의 거리 연결
-                                )
-                            }
-                            response.body()?.toString()?.let { it1 -> Log.d("성공", it1) }
-                        }
-                    }
-
-                    override fun onFailure(call: Call<DirectionsDto>, t: Throwable) {
-                    }
-
-                })
-        }
-    }
-
-    private suspend fun getBankListFromAPI() {
-        val retrofit = Retrofit.Builder()
-            .baseUrl(Url.MOCK_BANK_URL)
-            .addConverterFactory(GsonConverterFactory.create())
-            .build()
-
-        retrofit.create(BankApi::class.java).also { it ->
-            it.getBankList()
-                .enqueue(object : Callback<BankListDto> {
-                    override fun onResponse(
-                        call: Call<BankListDto>,
-                        response: Response<BankListDto>
-                    ) {
-                        if (response.isSuccessful.not()) {
-                            // 실패 처리에 대한 구현
-                            return
-                        }
-                        response.body()?.let { dto ->
-                            updateMarker(dto.items)
-                        }
-                    }
-
-                    override fun onFailure(call: Call<BankListDto>, t: Throwable) {
-                        // 실패 처리에 대한 구현
-                    }
-                })
-        }
     }
 
     private fun updateMarker(banks: List<BankDto>) {
@@ -186,8 +112,6 @@ class MainActivity : ViewBindingActivity<ActivityMainBinding>(), OnMapReadyCallb
             marker.isHideCollidedSymbols = true
         }
     }
-
-
     override fun onRequestPermissionsResult(
         requestCode: Int,
         permissions: Array<out String>,
