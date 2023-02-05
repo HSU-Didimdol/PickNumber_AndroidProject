@@ -22,7 +22,9 @@ class SearchActivity : ViewBindingActivity<ActivitySearchBinding>() {
     private val viewModel: SearchViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        setContentView(binding.root)
         super.onCreate(savedInstanceState)
+
 
     }
 }

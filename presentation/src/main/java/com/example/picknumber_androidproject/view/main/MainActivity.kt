@@ -19,6 +19,8 @@ import com.example.picknumber_androidproject.view.common.ViewBindingActivity
 import com.example.picknumber_androidproject.view.search.SearchActivity
 import com.naver.maps.geometry.LatLng
 import com.naver.maps.map.*
+import com.naver.maps.map.CameraUpdate.zoomTo
+import com.naver.maps.map.overlay.InfoWindow
 import com.naver.maps.map.overlay.Marker
 import com.naver.maps.map.util.FusedLocationSource
 import com.naver.maps.map.util.MarkerIcons
@@ -72,15 +74,17 @@ class MainActivity : ViewBindingActivity<ActivityMainBinding>(), OnMapReadyCallb
         naverMap.cameraPosition.target.latitude
         naverMap.cameraPosition.target.longitude
 
-        val cameraUpdate = CameraUpdate.scrollTo(
-            LatLng(
-                naverMap.cameraPosition.target.latitude,
-                naverMap.cameraPosition.target.longitude
+        val cameraUpdate = CameraUpdate
+            .scrollAndZoomTo(
+                LatLng(
+                    naverMap.cameraPosition.target.latitude,
+                    naverMap.cameraPosition.target.longitude
+                ),
+                9.0
             )
-        )
+
         naverMap.moveCamera(cameraUpdate)
 
-        getBankListFromAPI()
         getBankListDistanceFromAPI(naverMap.cameraPosition.target)
 
         //127.2566183,37.0095927 // 안성 본점
@@ -127,7 +131,7 @@ class MainActivity : ViewBindingActivity<ActivityMainBinding>(), OnMapReadyCallb
         }
     }
 
-    private fun getBankListFromAPI() {
+    private suspend fun getBankListFromAPI() {
         val retrofit = Retrofit.Builder()
             .baseUrl(Url.MOCK_BANK_URL)
             .addConverterFactory(GsonConverterFactory.create())
@@ -170,7 +174,15 @@ class MainActivity : ViewBindingActivity<ActivityMainBinding>(), OnMapReadyCallb
             marker.width = Marker.SIZE_AUTO
             marker.height = Marker.SIZE_AUTO
             marker.iconTintColor = Color.BLUE
-            marker.captionText = bank.name + " 새마을금고 " + bank.divisionName
+            // 마커 대신에 infoWindow로 대체해야함
+            val infoWindow = InfoWindow()
+            infoWindow.adapter = object : InfoWindow.DefaultTextAdapter(this) {
+                override fun getText(infoWindow: InfoWindow): CharSequence {
+                    return bank.name + " 새마을금고 " + bank.divisionName
+                }
+            }
+            infoWindow.open(marker)
+
             marker.isHideCollidedSymbols = true
         }
     }

@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/top_radius_white_background"
-    app:behavior_peekHeight="100dp"
+    app:behavior_peekHeight="160dp"
     app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior">
 
     <View
@@ -18,7 +18,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/bottomSheetTitleTextView"
+        android:id="@+id/bottomSheetNameTextView"
         android:layout_width="0dp"
         android:layout_height="100dp"
         android:padding="20dp"
@@ -30,6 +30,18 @@
         app:layout_constraintTop_toTopOf="parent"
         tools:text="새마을 금고 이름" />
 
+    <TextView
+        android:id="@+id/bottomSheetAddressTextView"
+        android:layout_width="0dp"
+        android:layout_height="100dp"
+        android:padding="20dp"
+        android:textColor="@color/black"
+        android:textSize="15sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
     <View
         android:id="@+id/lineView"
         android:layout_width="0dp"
@@ -37,6 +49,6 @@
         android:background="#cccccc"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/bottomSheetTitleTextView" />
+        app:layout_constraintTop_toBottomOf="@id/bottomSheetNameTextView" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
