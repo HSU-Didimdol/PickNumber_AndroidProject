@@ -40,7 +40,8 @@
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/bottomSheetNameTextView"
+        tools:text="새마을 금고 주소" />
 
     <View
         android:id="@+id/lineView"

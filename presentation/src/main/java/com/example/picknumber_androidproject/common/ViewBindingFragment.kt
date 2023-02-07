@@ -1,4 +1,4 @@
-package com.example.picknumber_androidproject.view.common
+package com.example.picknumber_androidproject.common
 
 import android.os.Bundle
 import android.view.LayoutInflater

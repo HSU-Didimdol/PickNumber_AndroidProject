@@ -22,5 +22,5 @@ data class Bank(
     val use: String = "Y",
     val modifyDate: String,
     val registrationDate: String,
-    val distance: Int
+    var distance: Int
 )

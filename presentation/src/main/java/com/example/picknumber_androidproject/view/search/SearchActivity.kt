@@ -6,7 +6,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import androidx.activity.viewModels
 import com.example.picknumber_androidproject.databinding.ActivitySearchBinding
-import com.example.picknumber_androidproject.view.common.ViewBindingActivity
+import com.example.picknumber_androidproject.common.ViewBindingActivity
 
 class SearchActivity : ViewBindingActivity<ActivitySearchBinding>() {
 
@@ -24,7 +24,6 @@ class SearchActivity : ViewBindingActivity<ActivitySearchBinding>() {
     override fun onCreate(savedInstanceState: Bundle?) {
         setContentView(binding.root)
         super.onCreate(savedInstanceState)
-
 
     }
 }

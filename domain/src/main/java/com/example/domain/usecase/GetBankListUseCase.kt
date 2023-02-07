@@ -3,8 +3,8 @@ package com.example.domain.usecase
 import com.example.domain.repository.BankRepository
 import javax.inject.Inject
 
-class GetAllBankUseCase @Inject constructor(
+class GetBankListUseCase @Inject constructor(
     private val repository: BankRepository
 ) {
-    operator fun invoke() = repository.getAllBanks()
+    suspend operator fun invoke(start: String) = repository.getAllBanks(start)
 }

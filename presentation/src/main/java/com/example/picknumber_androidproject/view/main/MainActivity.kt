@@ -3,35 +3,26 @@ package com.example.picknumber_androidproject.view.main
 import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import androidx.activity.viewModels
 import androidx.core.view.WindowCompat
-import com.example.data.model.bank.BankDto
-import com.example.data.model.bank.BankListDto
-import com.example.data.api.BankApi
-import com.example.data.api.Direction5Api
-import com.example.data.model.directions5.DirectionsDto
-import com.example.data.url.Url
 import com.example.picknumber_androidproject.R
 import com.example.picknumber_androidproject.databinding.ActivityMainBinding
-import com.example.picknumber_androidproject.view.common.ViewBindingActivity
+import com.example.picknumber_androidproject.common.ViewBindingActivity
 import com.example.picknumber_androidproject.view.search.SearchActivity
 import com.naver.maps.geometry.LatLng
 import com.naver.maps.map.*
-import com.naver.maps.map.CameraUpdate.zoomTo
 import com.naver.maps.map.overlay.InfoWindow
 import com.naver.maps.map.overlay.Marker
 import com.naver.maps.map.util.FusedLocationSource
 import com.naver.maps.map.util.MarkerIcons
-import kotlinx.coroutines.CoroutineScope
-import retrofit2.*
-import retrofit2.converter.gson.GsonConverterFactory
+import dagger.hilt.android.AndroidEntryPoint
 
 // 우리집 좌표
 //  "x": "126.9050532",
 //  "y": "37.4652659",
 
+@AndroidEntryPoint
 class MainActivity : ViewBindingActivity<ActivityMainBinding>(), OnMapReadyCallback {
 
     private val viewModel: MainViewModel by viewModels()
@@ -49,16 +40,16 @@ class MainActivity : ViewBindingActivity<ActivityMainBinding>(), OnMapReadyCallb
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(binding.root)
         mapView.onCreate(savedInstanceState)
         mapView.getMapAsync(this)
+        viewModel.loadBankList()
+        updateMarker()
 
         WindowCompat.setDecorFitsSystemWindows(window, true)
 
         binding.searchButton.setOnClickListener {
             startSearchActivity()
         }
-
     }
 
     override fun onMapReady(Map: NaverMap) {
@@ -70,9 +61,7 @@ class MainActivity : ViewBindingActivity<ActivityMainBinding>(), OnMapReadyCallb
         locationSource =
             FusedLocationSource(this@MainActivity, LOCATION_PERMISSION_REQUEST_CODE)
         naverMap.locationSource = locationSource
-
-        naverMap.cameraPosition.target.latitude
-        naverMap.cameraPosition.target.longitude
+        naverMap.locationTrackingMode = LocationTrackingMode.Follow
 
         val cameraUpdate = CameraUpdate
             .scrollAndZoomTo(
@@ -86,16 +75,13 @@ class MainActivity : ViewBindingActivity<ActivityMainBinding>(), OnMapReadyCallb
         naverMap.moveCamera(cameraUpdate)
     }
 
-    private fun updateMarker(banks: List<BankDto>) {
-
-        banks.forEach { bank ->
-            Log.d("Banks", bank.toString())
+    private fun updateMarker() {
+        viewModel.bankList.forEach { bank ->
             val marker = Marker()
             marker.position = LatLng(bank.latitude, bank.longitude)
             // TODO : 마커 클릭 리스너
             marker.infoWindow
             marker.map = naverMap
-            marker.tag = bank.code
             marker.icon = MarkerIcons.BLACK
             marker.width = Marker.SIZE_AUTO
             marker.height = Marker.SIZE_AUTO
@@ -104,7 +90,7 @@ class MainActivity : ViewBindingActivity<ActivityMainBinding>(), OnMapReadyCallb
             val infoWindow = InfoWindow()
             infoWindow.adapter = object : InfoWindow.DefaultTextAdapter(this) {
                 override fun getText(infoWindow: InfoWindow): CharSequence {
-                    return bank.name + " 새마을금고 " + bank.divisionName
+                    return bank.name
                 }
             }
             infoWindow.open(marker)
@@ -112,6 +98,7 @@ class MainActivity : ViewBindingActivity<ActivityMainBinding>(), OnMapReadyCallb
             marker.isHideCollidedSymbols = true
         }
     }
+
     override fun onRequestPermissionsResult(
         requestCode: Int,
         permissions: Array<out String>,

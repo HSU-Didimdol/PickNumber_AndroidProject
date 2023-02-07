@@ -13,7 +13,6 @@ class BankPagingSource @Inject constructor(
     private val api: BankApi
 ) : PagingSource<Int, Bank>() {
     companion object {
-        private const val START_PAGE = 1
         const val PAGE_SIZE = 30
     }
 

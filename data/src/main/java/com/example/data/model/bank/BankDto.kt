@@ -22,5 +22,5 @@ data class BankDto(
     val use: String = "Y",
     val modifyDate: String,
     val registrationDate: String,
-    val distance: Int = 0
+    var distance: Int = 0
 )

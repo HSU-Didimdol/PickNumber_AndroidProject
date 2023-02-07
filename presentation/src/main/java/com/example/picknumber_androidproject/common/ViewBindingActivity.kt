@@ -1,11 +1,10 @@
-package com.example.picknumber_androidproject.view.common
+package com.example.picknumber_androidproject.common
 
 import android.os.Bundle
 import android.view.LayoutInflater
 import androidx.annotation.CallSuper
 import androidx.appcompat.app.AppCompatActivity
 import androidx.viewbinding.ViewBinding
-
 
 abstract class ViewBindingActivity<VB : ViewBinding> : AppCompatActivity() {
 
