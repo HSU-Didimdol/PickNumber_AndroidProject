@@ -3,7 +3,7 @@ package com.example.picknumber_androidproject.mapper
 import com.example.domain.model.Bank
 import com.example.domain.model.BankList
 import com.example.picknumber_androidproject.model.BankItemUiState
-import com.example.picknumber_androidproject.model.BankListUiState
+import com.example.picknumber_androidproject.model.BankUiState
 
 fun Bank.toUiState() = BankItemUiState(
     name = name,
@@ -13,7 +13,7 @@ fun Bank.toUiState() = BankItemUiState(
     longitude = longitude
 )
 
-fun BankList.toUiState() = BankListUiState(
+fun BankList.toUiState() = BankUiState(
     banks = data.map {
         it.toUiState()
     }

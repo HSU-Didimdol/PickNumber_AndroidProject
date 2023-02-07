@@ -1,5 +1,7 @@
 package com.example.picknumber_androidproject.model
 
-data class BankListUiState(
+import java.io.Serializable
+
+data class BankUiState(
     val banks: List<BankItemUiState> = emptyList()
-)
+) : Serializable

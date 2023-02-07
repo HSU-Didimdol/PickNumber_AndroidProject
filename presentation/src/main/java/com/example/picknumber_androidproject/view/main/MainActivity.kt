@@ -9,6 +9,7 @@ import androidx.core.view.WindowCompat
 import com.example.picknumber_androidproject.R
 import com.example.picknumber_androidproject.databinding.ActivityMainBinding
 import com.example.picknumber_androidproject.common.ViewBindingActivity
+import com.example.picknumber_androidproject.model.BankUiState
 import com.example.picknumber_androidproject.view.search.SearchActivity
 import com.naver.maps.geometry.LatLng
 import com.naver.maps.map.*
@@ -18,7 +19,6 @@ import com.naver.maps.map.util.FusedLocationSource
 import com.naver.maps.map.util.MarkerIcons
 import dagger.hilt.android.AndroidEntryPoint
 
-// 우리집 좌표
 //  "x": "126.9050532",
 //  "y": "37.4652659",
 
@@ -42,8 +42,7 @@ class MainActivity : ViewBindingActivity<ActivityMainBinding>(), OnMapReadyCallb
         super.onCreate(savedInstanceState)
         mapView.onCreate(savedInstanceState)
         mapView.getMapAsync(this)
-        viewModel.loadBankList()
-        updateMarker()
+        updateMarker(viewModel.uiState.value)
 
         WindowCompat.setDecorFitsSystemWindows(window, true)
 
@@ -75,8 +74,8 @@ class MainActivity : ViewBindingActivity<ActivityMainBinding>(), OnMapReadyCallb
         naverMap.moveCamera(cameraUpdate)
     }
 
-    private fun updateMarker() {
-        viewModel.bankList.forEach { bank ->
+    private fun updateMarker(value: BankUiState) {
+        value.banks.forEach { bank ->
             val marker = Marker()
             marker.position = LatLng(bank.latitude, bank.longitude)
             // TODO : 마커 클릭 리스너
